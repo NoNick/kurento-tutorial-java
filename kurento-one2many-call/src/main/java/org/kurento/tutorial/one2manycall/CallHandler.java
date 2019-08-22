@@ -49,6 +49,7 @@ public class CallHandler extends TextWebSocketHandler {
 
   private static final Logger log = LoggerFactory.getLogger(CallHandler.class);
   private static final Gson gson = new GsonBuilder().create();
+  private static final int MIN_BITRATE_BPS = 1_000_000;
 
   private final ConcurrentHashMap<String, UserSession> viewers = new ConcurrentHashMap<>();
 
@@ -125,6 +126,8 @@ public class CallHandler extends TextWebSocketHandler {
       presenterUserSession.setWebRtcEndpoint(new WebRtcEndpoint.Builder(pipeline).build());
 
       WebRtcEndpoint presenterWebRtc = presenterUserSession.getWebRtcEndpoint();
+      presenterWebRtc.setMinVideoSendBandwidth(MIN_BITRATE_BPS);
+      presenterWebRtc.setMaxVideoRecvBandwidth(0);
 
       presenterWebRtc.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 
@@ -189,6 +192,8 @@ public class CallHandler extends TextWebSocketHandler {
       viewers.put(session.getId(), viewer);
 
       WebRtcEndpoint nextWebRtc = new WebRtcEndpoint.Builder(pipeline).build();
+      nextWebRtc.setMinVideoRecvBandwidth(MIN_BITRATE_BPS);
+      nextWebRtc.setMaxVideoRecvBandwidth(0);
 
       nextWebRtc.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 

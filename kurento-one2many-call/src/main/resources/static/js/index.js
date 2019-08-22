@@ -117,7 +117,8 @@ function viewer() {
 
 		var options = {
 			remoteVideo : video,
-			onicecandidate : onIceCandidate
+			onicecandidate : onIceCandidate.
+            iceServers: [{"urls": "stun:stun.l.google.com:19302"}]
 		}
 		webRtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
 				function(error) {
