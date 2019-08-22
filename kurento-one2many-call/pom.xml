@@ -19,7 +19,7 @@
 	<!-- Project configuration -->
 
 	<properties>
-		<demo.port>8443</demo.port>
+		<demo.port>80</demo.port>
 		<start-class>org.kurento.tutorial.one2manycall.One2ManyCallApp</start-class>
 	</properties>
 
@@ -76,6 +76,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<jvmArguments>
+						-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+					</jvmArguments>
+				</configuration>
 			</plugin>
 		</plugins>
 
