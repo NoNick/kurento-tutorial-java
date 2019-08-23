@@ -19,8 +19,9 @@ var ws = new WebSocket('wss://' + location.host + '/call');
 var video;
 var webRtcPeer;
 var constraints = {
-    audio = true;
+    audio: true,
     video: {
+       width: 1280,
        height: 720,
        framerate: 30
      }
@@ -93,8 +94,8 @@ function presenter() {
 
 		var options = {
 			localVideo : video,
-			onicecandidate : onIceCandidate,
-			mediaConstraints: constraints
+			onicecandidate : onIceCandidate
+//			mediaConstraints: constraints
 		}
 		webRtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
 				function(error) {
@@ -125,9 +126,9 @@ function viewer() {
 
 		var options = {
 			remoteVideo : video,
-			onicecandidate : onIceCandidate.
-            iceServers: [{"urls": "stun:stun.l.google.com:19302"}],
-            mediaConstraints: constraints
+			onicecandidate : onIceCandidate,
+            iceServers: [{"urls": "stun:stun.l.google.com:19302"}]
+//            mediaConstraints: constraints
 		}
 		webRtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
 				function(error) {
@@ -159,7 +160,9 @@ function onIceCandidate(candidate) {
 		id : 'onIceCandidate',
 		candidate : candidate
 	};
-	sendMessage(message);
+	if (!candidate.address.endsWith('.local')) {
+		sendMessage(message);
+	}
 }
 
 function stop() {
